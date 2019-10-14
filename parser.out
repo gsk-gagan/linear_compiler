@@ -1,40 +1,34 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    L_SQ_BRACKET
-    R_SQ_BRACKET
-
 Grammar
 
 Rule 0     S' -> statement
 Rule 1     statement -> expression
-Rule 2     expression -> expression MULTIPLY expression
-Rule 3     expression -> expression PLUS expression
-Rule 4     expression -> expression MINUS expression
-Rule 5     expression -> MINUS expression
-Rule 6     expression -> L_BRACKET expression R_BRACKET
-Rule 7     expression -> INT
-Rule 8     expression -> FLOAT
-Rule 9     expression -> FACTOR
+Rule 2     expression -> expression PLUS expression
+Rule 3     expression -> expression MINUS expression
+Rule 4     expression -> INT MULTIPLY FACTOR
+Rule 5     expression -> FLOAT MULTIPLY FACTOR
+Rule 6     expression -> MINUS expression
+Rule 7     expression -> L_BRACKET expression R_BRACKET
+Rule 8     expression -> INT
+Rule 9     expression -> FLOAT
+Rule 10    expression -> FACTOR
 
 Terminals, with rules where they appear
 
-FACTOR               : 9
-FLOAT                : 8
-INT                  : 7
-L_BRACKET            : 6
-L_SQ_BRACKET         : 
-MINUS                : 4 5
-MULTIPLY             : 2
-PLUS                 : 3
-R_BRACKET            : 6
-R_SQ_BRACKET         : 
+FACTOR               : 4 5 10
+FLOAT                : 5 9
+INT                  : 4 8
+L_BRACKET            : 7
+MINUS                : 3 6
+MULTIPLY             : 4 5
+PLUS                 : 2
+R_BRACKET            : 7
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 2 3 3 4 4 5 6
+expression           : 1 2 2 3 3 6 7
 statement            : 0
 
 Parsing method: LALR
@@ -43,20 +37,21 @@ state 0
 
     (0) S' -> . statement
     (1) statement -> . expression
-    (2) expression -> . expression MULTIPLY expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . MINUS expression
-    (6) expression -> . L_BRACKET expression R_BRACKET
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . FACTOR
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . INT MULTIPLY FACTOR
+    (5) expression -> . FLOAT MULTIPLY FACTOR
+    (6) expression -> . MINUS expression
+    (7) expression -> . L_BRACKET expression R_BRACKET
+    (8) expression -> . INT
+    (9) expression -> . FLOAT
+    (10) expression -> . FACTOR
 
-    MINUS           shift and go to state 3
-    L_BRACKET       shift and go to state 4
-    INT             shift and go to state 5
+    INT             shift and go to state 4
     FLOAT           shift and go to state 6
-    FACTOR          shift and go to state 7
+    MINUS           shift and go to state 3
+    L_BRACKET       shift and go to state 7
+    FACTOR          shift and go to state 5
 
     statement                      shift and go to state 1
     expression                     shift and go to state 2
@@ -70,241 +65,228 @@ state 1
 state 2
 
     (1) statement -> expression .
-    (2) expression -> expression . MULTIPLY expression
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
 
     $end            reduce using rule 1 (statement -> expression .)
-    MULTIPLY        shift and go to state 8
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
 
 
 state 3
 
-    (5) expression -> MINUS . expression
-    (2) expression -> . expression MULTIPLY expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . MINUS expression
-    (6) expression -> . L_BRACKET expression R_BRACKET
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . FACTOR
+    (6) expression -> MINUS . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . INT MULTIPLY FACTOR
+    (5) expression -> . FLOAT MULTIPLY FACTOR
+    (6) expression -> . MINUS expression
+    (7) expression -> . L_BRACKET expression R_BRACKET
+    (8) expression -> . INT
+    (9) expression -> . FLOAT
+    (10) expression -> . FACTOR
 
-    MINUS           shift and go to state 3
-    L_BRACKET       shift and go to state 4
-    INT             shift and go to state 5
+    INT             shift and go to state 4
     FLOAT           shift and go to state 6
-    FACTOR          shift and go to state 7
+    MINUS           shift and go to state 3
+    L_BRACKET       shift and go to state 7
+    FACTOR          shift and go to state 5
 
-    expression                     shift and go to state 11
+    expression                     shift and go to state 10
 
 state 4
 
-    (6) expression -> L_BRACKET . expression R_BRACKET
-    (2) expression -> . expression MULTIPLY expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . MINUS expression
-    (6) expression -> . L_BRACKET expression R_BRACKET
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . FACTOR
+    (4) expression -> INT . MULTIPLY FACTOR
+    (8) expression -> INT .
 
-    MINUS           shift and go to state 3
-    L_BRACKET       shift and go to state 4
-    INT             shift and go to state 5
-    FLOAT           shift and go to state 6
-    FACTOR          shift and go to state 7
+    MULTIPLY        shift and go to state 11
+    PLUS            reduce using rule 8 (expression -> INT .)
+    MINUS           reduce using rule 8 (expression -> INT .)
+    $end            reduce using rule 8 (expression -> INT .)
+    R_BRACKET       reduce using rule 8 (expression -> INT .)
 
-    expression                     shift and go to state 12
 
 state 5
 
-    (7) expression -> INT .
+    (10) expression -> FACTOR .
 
-    MULTIPLY        reduce using rule 7 (expression -> INT .)
-    PLUS            reduce using rule 7 (expression -> INT .)
-    MINUS           reduce using rule 7 (expression -> INT .)
-    $end            reduce using rule 7 (expression -> INT .)
-    R_BRACKET       reduce using rule 7 (expression -> INT .)
+    PLUS            reduce using rule 10 (expression -> FACTOR .)
+    MINUS           reduce using rule 10 (expression -> FACTOR .)
+    $end            reduce using rule 10 (expression -> FACTOR .)
+    R_BRACKET       reduce using rule 10 (expression -> FACTOR .)
 
 
 state 6
 
-    (8) expression -> FLOAT .
+    (5) expression -> FLOAT . MULTIPLY FACTOR
+    (9) expression -> FLOAT .
 
-    MULTIPLY        reduce using rule 8 (expression -> FLOAT .)
-    PLUS            reduce using rule 8 (expression -> FLOAT .)
-    MINUS           reduce using rule 8 (expression -> FLOAT .)
-    $end            reduce using rule 8 (expression -> FLOAT .)
-    R_BRACKET       reduce using rule 8 (expression -> FLOAT .)
+    MULTIPLY        shift and go to state 12
+    PLUS            reduce using rule 9 (expression -> FLOAT .)
+    MINUS           reduce using rule 9 (expression -> FLOAT .)
+    $end            reduce using rule 9 (expression -> FLOAT .)
+    R_BRACKET       reduce using rule 9 (expression -> FLOAT .)
 
 
 state 7
 
-    (9) expression -> FACTOR .
+    (7) expression -> L_BRACKET . expression R_BRACKET
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . INT MULTIPLY FACTOR
+    (5) expression -> . FLOAT MULTIPLY FACTOR
+    (6) expression -> . MINUS expression
+    (7) expression -> . L_BRACKET expression R_BRACKET
+    (8) expression -> . INT
+    (9) expression -> . FLOAT
+    (10) expression -> . FACTOR
 
-    MULTIPLY        reduce using rule 9 (expression -> FACTOR .)
-    PLUS            reduce using rule 9 (expression -> FACTOR .)
-    MINUS           reduce using rule 9 (expression -> FACTOR .)
-    $end            reduce using rule 9 (expression -> FACTOR .)
-    R_BRACKET       reduce using rule 9 (expression -> FACTOR .)
-
-
-state 8
-
-    (2) expression -> expression MULTIPLY . expression
-    (2) expression -> . expression MULTIPLY expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . MINUS expression
-    (6) expression -> . L_BRACKET expression R_BRACKET
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . FACTOR
-
-    MINUS           shift and go to state 3
-    L_BRACKET       shift and go to state 4
-    INT             shift and go to state 5
+    INT             shift and go to state 4
     FLOAT           shift and go to state 6
-    FACTOR          shift and go to state 7
+    MINUS           shift and go to state 3
+    L_BRACKET       shift and go to state 7
+    FACTOR          shift and go to state 5
 
     expression                     shift and go to state 13
 
-state 9
+state 8
 
-    (3) expression -> expression PLUS . expression
-    (2) expression -> . expression MULTIPLY expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . MINUS expression
-    (6) expression -> . L_BRACKET expression R_BRACKET
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . FACTOR
+    (2) expression -> expression PLUS . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . INT MULTIPLY FACTOR
+    (5) expression -> . FLOAT MULTIPLY FACTOR
+    (6) expression -> . MINUS expression
+    (7) expression -> . L_BRACKET expression R_BRACKET
+    (8) expression -> . INT
+    (9) expression -> . FLOAT
+    (10) expression -> . FACTOR
 
-    MINUS           shift and go to state 3
-    L_BRACKET       shift and go to state 4
-    INT             shift and go to state 5
+    INT             shift and go to state 4
     FLOAT           shift and go to state 6
-    FACTOR          shift and go to state 7
+    MINUS           shift and go to state 3
+    L_BRACKET       shift and go to state 7
+    FACTOR          shift and go to state 5
 
     expression                     shift and go to state 14
 
-state 10
+state 9
 
-    (4) expression -> expression MINUS . expression
-    (2) expression -> . expression MULTIPLY expression
-    (3) expression -> . expression PLUS expression
-    (4) expression -> . expression MINUS expression
-    (5) expression -> . MINUS expression
-    (6) expression -> . L_BRACKET expression R_BRACKET
-    (7) expression -> . INT
-    (8) expression -> . FLOAT
-    (9) expression -> . FACTOR
+    (3) expression -> expression MINUS . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . INT MULTIPLY FACTOR
+    (5) expression -> . FLOAT MULTIPLY FACTOR
+    (6) expression -> . MINUS expression
+    (7) expression -> . L_BRACKET expression R_BRACKET
+    (8) expression -> . INT
+    (9) expression -> . FLOAT
+    (10) expression -> . FACTOR
 
-    MINUS           shift and go to state 3
-    L_BRACKET       shift and go to state 4
-    INT             shift and go to state 5
+    INT             shift and go to state 4
     FLOAT           shift and go to state 6
-    FACTOR          shift and go to state 7
+    MINUS           shift and go to state 3
+    L_BRACKET       shift and go to state 7
+    FACTOR          shift and go to state 5
 
     expression                     shift and go to state 15
 
+state 10
+
+    (6) expression -> MINUS expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+
+    PLUS            reduce using rule 6 (expression -> MINUS expression .)
+    MINUS           reduce using rule 6 (expression -> MINUS expression .)
+    $end            reduce using rule 6 (expression -> MINUS expression .)
+    R_BRACKET       reduce using rule 6 (expression -> MINUS expression .)
+
+  ! PLUS            [ shift and go to state 8 ]
+  ! MINUS           [ shift and go to state 9 ]
+
+
 state 11
 
-    (5) expression -> MINUS expression .
-    (2) expression -> expression . MULTIPLY expression
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
+    (4) expression -> INT MULTIPLY . FACTOR
 
-    MULTIPLY        reduce using rule 5 (expression -> MINUS expression .)
-    PLUS            reduce using rule 5 (expression -> MINUS expression .)
-    MINUS           reduce using rule 5 (expression -> MINUS expression .)
-    $end            reduce using rule 5 (expression -> MINUS expression .)
-    R_BRACKET       reduce using rule 5 (expression -> MINUS expression .)
-
-  ! MULTIPLY        [ shift and go to state 8 ]
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
+    FACTOR          shift and go to state 16
 
 
 state 12
 
-    (6) expression -> L_BRACKET expression . R_BRACKET
-    (2) expression -> expression . MULTIPLY expression
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
+    (5) expression -> FLOAT MULTIPLY . FACTOR
 
-    R_BRACKET       shift and go to state 16
-    MULTIPLY        shift and go to state 8
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 10
+    FACTOR          shift and go to state 17
 
 
 state 13
 
-    (2) expression -> expression MULTIPLY expression .
-    (2) expression -> expression . MULTIPLY expression
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
+    (7) expression -> L_BRACKET expression . R_BRACKET
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
 
-    MULTIPLY        reduce using rule 2 (expression -> expression MULTIPLY expression .)
-    PLUS            reduce using rule 2 (expression -> expression MULTIPLY expression .)
-    MINUS           reduce using rule 2 (expression -> expression MULTIPLY expression .)
-    $end            reduce using rule 2 (expression -> expression MULTIPLY expression .)
-    R_BRACKET       reduce using rule 2 (expression -> expression MULTIPLY expression .)
-
-  ! MULTIPLY        [ shift and go to state 8 ]
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
+    R_BRACKET       shift and go to state 18
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
 
 
 state 14
 
-    (3) expression -> expression PLUS expression .
-    (2) expression -> expression . MULTIPLY expression
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
+    (2) expression -> expression PLUS expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
 
-    PLUS            reduce using rule 3 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 3 (expression -> expression PLUS expression .)
-    $end            reduce using rule 3 (expression -> expression PLUS expression .)
-    R_BRACKET       reduce using rule 3 (expression -> expression PLUS expression .)
-    MULTIPLY        shift and go to state 8
+    PLUS            reduce using rule 2 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 2 (expression -> expression PLUS expression .)
+    $end            reduce using rule 2 (expression -> expression PLUS expression .)
+    R_BRACKET       reduce using rule 2 (expression -> expression PLUS expression .)
 
-  ! MULTIPLY        [ reduce using rule 3 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
+  ! PLUS            [ shift and go to state 8 ]
+  ! MINUS           [ shift and go to state 9 ]
 
 
 state 15
 
-    (4) expression -> expression MINUS expression .
-    (2) expression -> expression . MULTIPLY expression
-    (3) expression -> expression . PLUS expression
-    (4) expression -> expression . MINUS expression
+    (3) expression -> expression MINUS expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
 
-    PLUS            reduce using rule 4 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 4 (expression -> expression MINUS expression .)
-    $end            reduce using rule 4 (expression -> expression MINUS expression .)
-    R_BRACKET       reduce using rule 4 (expression -> expression MINUS expression .)
-    MULTIPLY        shift and go to state 8
+    PLUS            reduce using rule 3 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 3 (expression -> expression MINUS expression .)
+    $end            reduce using rule 3 (expression -> expression MINUS expression .)
+    R_BRACKET       reduce using rule 3 (expression -> expression MINUS expression .)
 
-  ! MULTIPLY        [ reduce using rule 4 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 10 ]
+  ! PLUS            [ shift and go to state 8 ]
+  ! MINUS           [ shift and go to state 9 ]
 
 
 state 16
 
-    (6) expression -> L_BRACKET expression R_BRACKET .
+    (4) expression -> INT MULTIPLY FACTOR .
 
-    MULTIPLY        reduce using rule 6 (expression -> L_BRACKET expression R_BRACKET .)
-    PLUS            reduce using rule 6 (expression -> L_BRACKET expression R_BRACKET .)
-    MINUS           reduce using rule 6 (expression -> L_BRACKET expression R_BRACKET .)
-    $end            reduce using rule 6 (expression -> L_BRACKET expression R_BRACKET .)
-    R_BRACKET       reduce using rule 6 (expression -> L_BRACKET expression R_BRACKET .)
+    PLUS            reduce using rule 4 (expression -> INT MULTIPLY FACTOR .)
+    MINUS           reduce using rule 4 (expression -> INT MULTIPLY FACTOR .)
+    $end            reduce using rule 4 (expression -> INT MULTIPLY FACTOR .)
+    R_BRACKET       reduce using rule 4 (expression -> INT MULTIPLY FACTOR .)
+
+
+state 17
+
+    (5) expression -> FLOAT MULTIPLY FACTOR .
+
+    PLUS            reduce using rule 5 (expression -> FLOAT MULTIPLY FACTOR .)
+    MINUS           reduce using rule 5 (expression -> FLOAT MULTIPLY FACTOR .)
+    $end            reduce using rule 5 (expression -> FLOAT MULTIPLY FACTOR .)
+    R_BRACKET       reduce using rule 5 (expression -> FLOAT MULTIPLY FACTOR .)
+
+
+state 18
+
+    (7) expression -> L_BRACKET expression R_BRACKET .
+
+    PLUS            reduce using rule 7 (expression -> L_BRACKET expression R_BRACKET .)
+    MINUS           reduce using rule 7 (expression -> L_BRACKET expression R_BRACKET .)
+    $end            reduce using rule 7 (expression -> L_BRACKET expression R_BRACKET .)
+    R_BRACKET       reduce using rule 7 (expression -> L_BRACKET expression R_BRACKET .)
 

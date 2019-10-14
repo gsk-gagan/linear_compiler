@@ -3,6 +3,9 @@ from sympy import simplify
 
 import risk_lexer
 import risk_parser
+from evaluate_ast import EvaluateAbstractSyntacticTree as EvalAST
+
+debug = False
 
 
 class RiskCompiler:
@@ -17,13 +20,15 @@ class RiskCompiler:
         self.parser = risk_parser.RiskParser()
         self.parser.build()
 
+        self.eval_ast = EvalAST(loadings_df=self.loadings_df)
+
     def _verify_mappings_df(self):
         if len(self.mappings_df) != len(self.mappings_df['ftag'].unique()):
             raise Exception('ERROR: 1-to-many mapping exist in mappings_df')
 
     # Expanded equations to non-mapped aladdin factors
     def expand_equation(self, eq):
-        # Get all tokens using the lexer and keep on replacing each token with its expanded version
+        # Get all FACTORS using the lexer and keep on replacing each FACTOR with its expanded version
         factors = self.lexer.get_tokens(eq, type='FACTOR')
         factors_map = {}
         for factor in factors:
@@ -41,14 +46,17 @@ class RiskCompiler:
         return eq_factors - sparse_mapped_factors
 
     def _get_sparse_loadings_from_expanded(self, eq):
-        # Get the parsed tree from the equation
         abstract_syntactic_tree = self.parser.get_parsed_tree(eq)
-        print(abstract_syntactic_tree)
-        # Select the rows from loadings dataframe and operate
+        if debug:
+            print(f'Abstract Syntactic Tree: {abstract_syntactic_tree}')
+        result_df = self.eval_ast.eval(abstract_syntactic_tree)
+        return result_df
 
     def get_sparse_loadings(self, eq):
-        exp_eq = self.expand_equation(eq)
-        exp_eq = str(simplify(exp_eq)).replace(' ', '')
+        exp_complex_eq = self.expand_equation(eq)
+        exp_eq = str(simplify(exp_complex_eq)).replace(' ', '')
+        if debug:
+            print(f'Original: {eq}; Expanded: {exp_complex_eq}; Simplified: {exp_eq}')
         unmapped_factors = self._get_non_sparse_mapped_factors(exp_eq)
         if len(unmapped_factors) != 0:
             raise Exception(f'Equation: {eq} expands to {exp_eq}, has unmapped factors: {unmapped_factors}')
@@ -56,25 +64,18 @@ class RiskCompiler:
 
 
 def main():
-    inp = '(.1*FACTOR1+.2*FACTOR2-FACTOR3-FACTOR5)'
-    inp = 'FACTOR1-FACTOR5'
     loadings_df = pd.read_csv('data/input/loadings.csv')
     mappings_df = pd.read_csv('data/input/factors_mapping.csv')
 
     risk_compiler = RiskCompiler(loadings_df, mappings_df)
-    risk_compiler.get_sparse_loadings(inp)
 
-    # import importlib
-    # importlib.reload(risk_parser)
-
-    # sim_eq = simplify('(.1*(10*(2*(4*FACTOR3)+3*(FACTOR4))+5*FACTOR3)+.2*(2*(4*FACTOR3)+3*(FACTOR4))-FACTOR3)')
-    # str(sim_eq).replace(' ', '')
-
-    # parser = risk_parser.RiskParser()
-    # parser.build()
-    #
-    # x = parser.get_parsed_tree(inp)
+    for inp in ['(.1*FACTOR1+.2*FACTOR2-FACTOR3-FACTOR5)', '-FACTOR5', 'FACTOR4', 'FACTOR3+FACTOR4+FACTOR5']:
+        mapped_factor_loading_df = risk_compiler.get_sparse_loadings(inp)
+        if debug:
+            print(mapped_factor_loading_df)
+            print()
 
 
 if __name__ == '__main__':
+    debug = True
     main()

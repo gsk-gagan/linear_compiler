@@ -10,8 +10,6 @@ class RiskLexer:
         'MULTIPLY',
         'L_BRACKET',
         'R_BRACKET',
-        'L_SQ_BRACKET',
-        'R_SQ_BRACKET',
         'FACTOR'
     ]
 
@@ -21,10 +19,6 @@ class RiskLexer:
 
     t_L_BRACKET = r'\('
     t_R_BRACKET = r'\)'
-
-    # TODO: Fix square brackets
-    t_L_SQ_BRACKET = r'\['
-    t_R_SQ_BRACKET = r'\]'
 
     t_ignore = r'[ =@]'
 
@@ -45,8 +39,8 @@ class RiskLexer:
 
     # Error handling rule
     def t_error(self, t):
-        print("Illegal character '%s'" % t.value[0])
-        t.lexer.skip(1)
+        raise Exception("Illegal character '%s'" % t.value[0])
+        # t.lexer.skip(1)           # This should be used if we aren't raising exception on illegal character
 
     # Build the lexer
     def build(self, **kwargs):
